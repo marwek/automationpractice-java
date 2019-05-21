@@ -6,18 +6,21 @@ import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public abstract class BasePage {
-    // BasePage fields
-    private Map<String, String> data;
-    private WebDriver driver;
-    private int timeout = 15;
-    protected String pageUrl = "http://automationpractice.com";
 
+    // BasePage fields
+    public WebDriver driver;
+    public WebDriverWait wait;
+    private int timeout = 15;
+    private static final String pageUrl = "http://automationpractice.com";
+    private static final String pageText = "Automation Practice Website";
 
     // User information module NAV
     @FindBy(css = "a.login")
@@ -79,20 +82,10 @@ public abstract class BasePage {
     public BasePage(WebDriver driver) {
         this();
         this.driver = driver;
+        wait = new WebDriverWait(driver, 5);
         PageFactory.initElements(driver, this);
+
     }
-
-    // public BasePage(WebDriver driver, Map<String, String> data) {
-    //     this(driver);
-    //     this.data = data;
-    //
-    // }
-
-    // public BasePage(WebDriver driver, Map<String, String> data, int timeout) {
-    //     this(driver, data);
-    //     this.timeout = timeout;
-    //     PageFactory.initElements(driver, this);
-    // }
 
     /**
      * Click on About Us Link.
@@ -117,17 +110,17 @@ public abstract class BasePage {
     /**
      * Click on Sign In Link.
      *
-     * @return the BasePage class instance.
+     * @return the SignInPage page instance.
      */
     public BasePage clickSignInLink() {
         signIn.click();
-        return this;
+        return new SignInPage(driver);
     }
 
     /**
      * Click on Contact Us Link in nav bar.
      *
-     * @return the BasePage class instance.
+     * @return the ContactUs page instance.
      */
     public BasePage clickContactUsNavBarLink() {
         contactUs.click();
@@ -147,4 +140,46 @@ public abstract class BasePage {
         });
         return this;
     }
+
+    /**
+     * Verify that the page loaded completely.
+     *
+     * @return true/false
+     */
+    public BasePage verifyPageLoaded() {
+        (new WebDriverWait(driver, timeout)).until(new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver d) {
+                return d.getPageSource().contains(pageText);
+            }
+        });
+        return this;
+    }
+
+    /**
+     * Wrapper for wait method.
+     * @param elementBy
+     */
+    public void waitVisibility(WebElement elementBy) {
+        wait.until(ExpectedConditions.visibilityOf(elementBy));
+    }
+
+    /**
+     * Read web element text
+     * @param elementBy
+     * @return text of element
+     */
+    public String readText(By elementBy) {
+        return driver.findElement(elementBy).getText();
+    }
+
+    /**
+     * Write text to specified inputfield
+     * @param elementLocation
+     * @param text
+     */
+    public void writeText(By elementLocation, String text) {
+        driver.findElement(elementLocation).sendKeys(text);
+    }
+
+
 }
