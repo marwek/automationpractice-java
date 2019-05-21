@@ -16,8 +16,8 @@ import org.openqa.selenium.WebElement;
 public abstract class BasePage {
 
     // BasePage fields
-    public WebDriver driver;
-    public WebDriverWait wait;
+    private WebDriver driver;
+    private WebDriverWait wait;
     private int timeout = 15;
     private static final String pageUrl = "http://automationpractice.com";
     private static final String pageText = "Automation Practice Website";

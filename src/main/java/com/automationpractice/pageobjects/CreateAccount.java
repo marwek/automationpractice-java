@@ -5,8 +5,14 @@ import java.util.List;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CreateAccount {
+    private WebDriver driver;
+    private WebDriverWait wait;
+    private int timeout = 15;
     private String pageText = "You must register at least one phone number";
 
     // Register new user elements
@@ -27,6 +33,14 @@ public class CreateAccount {
     private final String mrsValue = "2";
 
     public CreateAccount() {
+    }
+
+    public CreateAccount(WebDriver driver) {
+        this();
+        this.driver = driver;
+        wait = new WebDriverWait(driver, 5);
+        PageFactory.initElements(driver, this);
+
     }
 
     /**
@@ -70,6 +84,20 @@ public class CreateAccount {
      */
     public CreateAccount clickCreateAnAccountButton() {
         createAnAccount.click();
+        return this;
+    }
+
+    /**
+     * Verify that the page loaded completely.
+     *
+     * @return true/false
+     */
+    public CreateAccount verifyPageLoaded() {
+        (new WebDriverWait(driver, timeout)).until(new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver d) {
+                return d.getPageSource().contains(pageText);
+            }
+        });
         return this;
     }
 }
