@@ -66,7 +66,7 @@ public class CreateAccount {
      *
      * @return the SignInPage class instance.
      */
-    public SignInPage setMrRadioButtonField() {
+    public CreateAccount setMrRadioButtonField() {
         for (WebElement el : mr) {
             if (el.getAttribute("value").equals(mrValue)) {
                 if (!el.isSelected()) {

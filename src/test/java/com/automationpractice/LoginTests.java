@@ -51,7 +51,7 @@ public class LoginTests {
 
         SignInPage signInPage = new SignInPage(driver);
         signInPage.verifyPageLoaded()
-                    .createNewUser("user@email.com")
+                    .createNewUser("user@email.com");
 
         CreateAccount create = new CreateAccount(driver);
         create.clickCreateAnAccountButton()
