@@ -1,5 +1,6 @@
 package com.automationpractice;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.concurrent.TimeUnit;
@@ -7,20 +8,18 @@ import java.util.concurrent.TimeUnit;
 import com.automationpractice.pageobjects.CreateAccount;
 import com.automationpractice.pageobjects.HomePage;
 import com.automationpractice.pageobjects.SignInPage;
+import com.automationpractice.utils.PageUrls;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.FindBy;
 
 @DisplayName("User login tests.")
 public class LoginTests {
     public WebDriver driver;
-    String pageUrl = "http://automationpractice.com";
     public String  authFailed = "Authentication failed";
 
     @BeforeEach
@@ -28,7 +27,7 @@ public class LoginTests {
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().window().maximize();
-        driver.get(pageUrl);
+        driver.get(PageUrls.getMainUrl());
     }
 
     @Test
@@ -51,11 +50,29 @@ public class LoginTests {
 
         SignInPage signInPage = new SignInPage(driver);
         signInPage.verifyPageLoaded()
-                    .createNewUser("user@email.com");
+                    .createNewUser("user1123@email.com");
 
         CreateAccount create = new CreateAccount(driver);
         create.clickCreateAnAccountButton()
-                    .setMrRadioButtonField();
+                    .setMrRadioButtonField()
+                    .setFirstName("Janek")
+                    .setLastName("Kovalsky")
+                    .setPassword("123456")
+                    .selectDayOfBirth("12")
+                    .selectMonthOfBirth("6")
+                    .selectYearOfBirth("1956")
+                    .setSignUpForOurNewsletter()
+                    .setReceiveSpecialOffersFromOurPartners()
+                    .setAddress("Łączna")
+                    .setState("Iowa")
+                    .setZippostalCodeTextField("678900")
+                    .setMobilePhone("900900900");
+
+        assertEquals("Janek", create.getFirstName());
+        assertEquals("Kovalsky", create.getLastName());
+        assertEquals("Łączna", create.getAddress());
+
+
     }
 
     @AfterEach
