@@ -9,18 +9,17 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class DriverFactory {
-    
     private static final Map<DriverType, Supplier<WebDriver>> driverMap = new HashMap<>();
 
     // chrome driver supplier
     private static final Supplier<WebDriver> chromeDriverSupplier = () -> {
-        // System.setProperty("webdriver.chrome.driver", "/path/to/chromedriver");
+        Log.info(">>> Start Chrome driver. <<<");
         return new ChromeDriver();
     };
 
     // firefox driver supplier
     private static final Supplier<WebDriver> firefoxDriverSupplier = () -> {
-        // System.setProperty("webdriver.gecko.driver", "/Users/username/Downloads/geckodriver");
+        Log.info(">>> Start Firefox driver. <<<");
         return new FirefoxDriver();
     };
 

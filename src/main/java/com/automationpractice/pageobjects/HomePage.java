@@ -2,6 +2,8 @@ package com.automationpractice.pageobjects;
 
 import java.util.List;
 
+import com.automationpractice.utils.Log;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -25,12 +27,10 @@ public class HomePage extends BasePage {
     private String fancyFrame = "iframe[class='fancybox-iframe']";
 
     // Page elements
-    @FindBy(xpath = "//ul[@id='homefeatured']/li")
-    @CacheLookup
-    private List<WebElement> homefeatured;
+    @FindBy(xpath = "//ul[@id='popularProductList']")
+    private List<WebElement> popularProductList;
 
     @FindBy(xpath = "//div[@class='product-container']")
-    @CacheLookup
     private List<WebElement> productContainer;
 
     @FindBy(css = "body[id='product']")
@@ -46,7 +46,7 @@ public class HomePage extends BasePage {
     private WebElement sizeSelect;
 
     @FindBy(xpath = "//ul[@id='color_to_pick_list']")
-    private List<WebElement> selectColour;
+    private List<WebElement> colourList;
 
     // HomePage contructor
     public HomePage() {
@@ -68,21 +68,27 @@ public class HomePage extends BasePage {
      */
     public HomePage addPopularProductToCart(String elementTitle, int quantity, String size, String colour) {
         // foreach - few elements on page
-        for (WebElement el : homefeatured) {
+        Log.info("Add popular product to the cart: " + elementTitle);
+        for (WebElement el : popularProductList) {
+            Log.info(String.format("--> Element %s <---", el.getAttribute("value")));
             if (el.getText().contains(elementTitle)) {
                 Actions action = new Actions(driver);
                 action.moveToElement(el).moveToElement(driver.findElement(By.xpath("//a[@class='quick-view']"))).click();
                 action.perform();
-                break;
+                Log.info(String.format("Click on product '%s'.", el.getText()));
             }
         }
+        Log.info("Wait for Fancy box");
         waitForFancyboxFrame("body[id='product']");
+        Log.info(String.format("Click '%d' times quantity '+' button", quantity));
         for (int i = 1; i < quantity; i++) {
             quantityPlus.click();
             pause(250);
         }
+        Log.info("Select size: " + size);
         selectSize(size);
-        
+        Log.info("Select colour: " + colour);
+        selectColour(colour);
 
         return this;
     }
@@ -94,6 +100,15 @@ public class HomePage extends BasePage {
      */
     public HomePage selectSize(String size) {
         new Select(sizeSelect).selectByVisibleText(size);
+        return this;
+    }
+
+    public HomePage selectColour(String colour) {
+        for (WebElement el : colourList) {
+            if (el.getAttribute("name").toLowerCase() == colour.toLowerCase()) {
+                el.click();
+            }
+        }
         return this;
     }
 
