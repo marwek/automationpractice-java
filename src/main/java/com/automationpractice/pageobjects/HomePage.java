@@ -27,7 +27,7 @@ public class HomePage extends BasePage {
     private String fancyFrame = "iframe[class='fancybox-iframe']";
 
     // Page elements
-    @FindBy(xpath = "//ul[@id='popularProductList']")
+    @FindBy(xpath = "//ul[@id='homefeatured']/li")
     private List<WebElement> popularProductList;
 
     @FindBy(xpath = "//div[@class='product-container']")
@@ -45,7 +45,7 @@ public class HomePage extends BasePage {
     @FindBy(css = "select[name='group_1']")
     private WebElement sizeSelect;
 
-    @FindBy(xpath = "//ul[@id='color_to_pick_list']")
+    @FindBy(xpath = "//ul[@id='color_to_pick_list']/li")
     private List<WebElement> colourList;
 
     // HomePage contructor
@@ -70,8 +70,8 @@ public class HomePage extends BasePage {
         // foreach - few elements on page
         Log.info("Add popular product to the cart: " + elementTitle);
         for (WebElement el : popularProductList) {
-            Log.info(String.format("--> Element %s <---", el.getAttribute("value")));
             if (el.getText().contains(elementTitle)) {
+                Log.info(String.format("--> Element %s <---", el.getAttribute("value")));
                 Actions action = new Actions(driver);
                 action.moveToElement(el).moveToElement(driver.findElement(By.xpath("//a[@class='quick-view']"))).click();
                 action.perform();
