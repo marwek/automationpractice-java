@@ -35,7 +35,8 @@ public class AddToCartTests {
 
         HomePage home = new HomePage(driver);
         home.verifyPageLoaded();
-        home.addPopularProductToCart(1); //Faded Short Sleeve T-shirts
+        home.addPopularProductToCart("Faded Short Sleeve T-shirts", 4, "M", "Blue"); 
+        // home.waitVisibility(elementBy);
 
     }
 }
