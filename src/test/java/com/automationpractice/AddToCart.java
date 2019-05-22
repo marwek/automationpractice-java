@@ -1,9 +1,9 @@
 package com.automationpractice;
 
-import java.util.concurrent.TimeUnit;
 
-import com.automationpractice.utils.Browser;
-import com.automationpractice.utils.BrowserFactory;
+import com.automationpractice.pageobjects.HomePage;
+import com.automationpractice.utils.DriverFactory;
+import com.automationpractice.utils.DriverType;
 import com.automationpractice.utils.PageUrls;
 
 import org.junit.jupiter.api.AfterEach;
@@ -28,11 +28,12 @@ public class AddToCart {
 
     @Test
     public void addToCartFirstProductOnPopularCategoryFirefox() {
-        driver = BrowserFactory.GetBrowser(Browser.FIREFOX);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver = DriverFactory.getDriver(DriverType.CHROME);
         driver.manage().window().maximize();
         driver.get(PageUrls.getMainUrl());
 
+        HomePage home = new HomePage(driver);
+        home.printList();
 
     }
 

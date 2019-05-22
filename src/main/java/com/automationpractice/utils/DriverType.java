@@ -1,6 +1,6 @@
 package com.automationpractice.utils;
 
 
-public enum Browser {
+public enum DriverType {
     CHROME, FIREFOX
 }
