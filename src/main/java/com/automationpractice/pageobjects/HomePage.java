@@ -2,6 +2,7 @@ package com.automationpractice.pageobjects;
 
 import java.util.List;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
@@ -20,6 +21,9 @@ public class HomePage extends BasePage {
     @CacheLookup
     private List<WebElement> homefeatured;
 
+    @FindBy(xpath = "//div[@class='product-container']")
+    @CacheLookup
+    private List<WebElement> productContainer;
 
     // HomePage contructor
     public HomePage() {
@@ -31,10 +35,26 @@ public class HomePage extends BasePage {
         PageFactory.initElements(driver, this);
     }
 
-    public void printList() {
-        for (WebElement element  : homefeatured) {
-            System.out.println(element.getAttribute("value"));
-        }
+    /**
+     * Add popular product to the cart
+     * @param element
+     * @return
+     */
+    public HomePage addPopularProductToCart(int element) {
+        WebElement product = homefeatured.get(element);
+        System.out.println(product.getText());
+        return this;
+    }
+
+    /**
+     * Check if displayed product has image
+     * @param element
+     * @return
+     */
+    public HomePage productIsDisplayed(int element) {
+        // WebElement image = driver.findElement(By.xpath)
+
+        return this;
     }
 
     /**
@@ -42,7 +62,7 @@ public class HomePage extends BasePage {
      *
      * @return true/false
      */
-    public BasePage verifyPageLoaded() {
+    public HomePage verifyPageLoaded() {
         (new WebDriverWait(driver, timeout)).until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
                 return d.getPageSource().contains(pageText);
@@ -50,4 +70,6 @@ public class HomePage extends BasePage {
         });
         return this;
     }
+
+	
 }

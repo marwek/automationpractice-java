@@ -1,17 +1,17 @@
 package com.automationpractice;
 
+import java.util.concurrent.TimeUnit;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.automationpractice.pageobjects.HomePage;
 import com.automationpractice.utils.DriverFactory;
 import com.automationpractice.utils.DriverType;
 import com.automationpractice.utils.PageUrls;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 
-public class AddToCart {
+public class AddToCartTests {
     private WebDriver driver;
 
     @BeforeEach
@@ -20,7 +20,7 @@ public class AddToCart {
 
     @AfterEach
     public void tearDown() {
-        if(driver !=null) {
+        if (driver != null) {
             driver.close();
             driver.quit();
         }
@@ -29,12 +29,13 @@ public class AddToCart {
     @Test
     public void addToCartFirstProductOnPopularCategoryFirefox() {
         driver = DriverFactory.getDriver(DriverType.CHROME);
+        driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
         driver.manage().window().maximize();
         driver.get(PageUrls.getMainUrl());
 
         HomePage home = new HomePage(driver);
-        home.printList();
+        home.verifyPageLoaded();
+        home.addPopularProductToCart(1); //Faded Short Sleeve T-shirts
 
     }
-
 }

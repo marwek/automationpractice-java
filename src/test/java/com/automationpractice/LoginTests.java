@@ -19,8 +19,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 @DisplayName("User login tests.")
 public class LoginTests {
-    public WebDriver driver;
-    public String  authFailed = "Authentication failed";
+    private WebDriver driver;
+    private String  authFailed = "Authentication failed";
 
     @BeforeEach
     public void setUp() {
