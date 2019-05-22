@@ -33,14 +33,15 @@ public class AddToCartTests {
     @Test
     public void addToCartFirstProductOnPopularCategoryFirefox() {
         driver = DriverFactory.getDriver(DriverType.CHROME);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
         driver.manage().window().maximize();
         driver.get(PageUrls.getMainUrl());
         Log.startTestCase("addToCartFirstProductOnPopularCategoryFirefox");
         HomePage home = new HomePage(driver);
         home.verifyPageLoaded();
-        home.addPopularProductToCart("Faded Short Sleeve T-shirts", 4, "M", "Blue"); 
-        // home.waitVisibility(elementBy);
+        home.addPopularProductToCart("Faded Short Sleeve T-shirts", 10, "M", "Blue")
+            .proceedToCheckout(); 
+        
         
         Log.endTestCase("addToCartFirstProductOnPopularCategoryFirefox");
     }

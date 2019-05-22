@@ -17,11 +17,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.Select;
 
-
 public class HomePage extends BasePage {
     private WebDriver driver;
     private int timeout = 15;
-    
+
     // Page static fields
     private String pageText = "Practice Selenium";
     private String fancyFrame = "iframe[class='fancybox-iframe']";
@@ -38,15 +37,21 @@ public class HomePage extends BasePage {
 
     @FindBy(xpath = "//*[@id='quantity_wanted_p']/a[1]")
     private WebElement quantityMinus;
-    
+
     @FindBy(xpath = "//*[@id='quantity_wanted_p']/a[2]")
     private WebElement quantityPlus;
 
     @FindBy(css = "select[name='group_1']")
     private WebElement sizeSelect;
 
-    @FindBy(xpath = "//ul[@id='color_to_pick_list']/li")
+    @FindBy(xpath = "//ul[@id='color_to_pick_list']/li/a")
     private List<WebElement> colourList;
+
+    @FindBy(css = "button[name='Submit']")
+    private WebElement addToCart;
+
+    @FindBy(css = "a[title='Proceed to checkout']")
+    private WebElement proceedToCheckout;
 
     // HomePage contructor
     public HomePage() {
@@ -60,10 +65,11 @@ public class HomePage extends BasePage {
 
     /**
      * Add popular product to the cart
+     * 
      * @param elementTitle name of the popular product
-     * @param quantity number 
-     * @param size given size
-     * @param colour given colour
+     * @param quantity     number
+     * @param size         given size
+     * @param colour       given colour
      * @return same
      */
     public HomePage addPopularProductToCart(String elementTitle, int quantity, String size, String colour) {
@@ -73,28 +79,43 @@ public class HomePage extends BasePage {
             if (el.getText().contains(elementTitle)) {
                 Log.info(String.format("--> Element %s <---", el.getAttribute("value")));
                 Actions action = new Actions(driver);
-                action.moveToElement(el).moveToElement(driver.findElement(By.xpath("//a[@class='quick-view']"))).click();
+                action.moveToElement(el).moveToElement(driver.findElement(By.xpath("//a[@class='quick-view']")))
+                        .click();
                 action.perform();
                 Log.info(String.format("Click on product '%s'.", el.getText()));
             }
         }
         Log.info("Wait for Fancy box");
         waitForFancyboxFrame("body[id='product']");
+        
         Log.info(String.format("Click '%d' times quantity '+' button", quantity));
         for (int i = 1; i < quantity; i++) {
             quantityPlus.click();
             pause(250);
         }
-        Log.info("Select size: " + size);
-        selectSize(size);
+        
         Log.info("Select colour: " + colour);
         selectColour(colour);
+        
+        Log.info("Select size: " + size);
+        selectSize(size);
+        
+        addToCart.click();
+        return this;
+    }
 
+    /**
+     * Click proceed to checkout button.
+     * @return
+     */
+    public HomePage proceedToCheckout() {
+        proceedToCheckout.click();
         return this;
     }
 
     /**
      * Select size of the product
+     * 
      * @param size text S/M/L
      * @return same
      */
@@ -105,8 +126,10 @@ public class HomePage extends BasePage {
 
     public HomePage selectColour(String colour) {
         for (WebElement el : colourList) {
-            if (el.getAttribute("name").toLowerCase() == colour.toLowerCase()) {
-                el.click();
+            if (el.getAttribute("name").toLowerCase().contains(colour.toLowerCase())) {
+                    if (!el.isSelected()) {
+                        el.click();
+                    }
             }
         }
         return this;
@@ -128,6 +151,7 @@ public class HomePage extends BasePage {
 
     /**
      * Wait and check if element exist in inner frame
+     * 
      * @param element css selector of element
      */
     public void waitForFancyboxFrame(String element) {
@@ -140,6 +164,5 @@ public class HomePage extends BasePage {
             e.getMessage();
         }
     }
-
 
 }
