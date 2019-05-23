@@ -50,8 +50,10 @@ public class HomePage extends BasePage {
     @FindBy(css = "button[name='Submit']")
     private WebElement addToCart;
 
-    @FindBy(css = "a[title='Proceed to checkout']")
-    private WebElement proceedToCheckout;
+
+
+    @FindBy(css = "#layer_cart")
+    private WebElement layerCart;
 
     // HomePage contructor
     public HomePage() {
@@ -70,9 +72,8 @@ public class HomePage extends BasePage {
      * @param quantity     number
      * @param size         given size
      * @param colour       given colour
-     * @return same
      */
-    public HomePage addPopularProductToCart(String elementTitle, int quantity, String size, String colour) {
+    public void addPopularProduct(String elementTitle, int quantity, String size, String colour) {
         // foreach - few elements on page
         Log.info("Add popular product to the cart: " + elementTitle);
         for (WebElement el : popularProductList) {
@@ -99,18 +100,24 @@ public class HomePage extends BasePage {
         
         Log.info("Select size: " + size);
         selectSize(size);
-        
+    }
+
+    /**
+     * Click button Add to cart
+     */
+    public void addToCart() {
         addToCart.click();
-        return this;
+        pause(1000);
     }
 
     /**
      * Click proceed to checkout button.
-     * @return
      */
-    public HomePage proceedToCheckout() {
-        proceedToCheckout.click();
-        return this;
+    public void proceedToCheckout() {
+        WebElement element = (new WebDriverWait(driver, 30))
+                .until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[title='Proceed to checkout']")));
+        pause(500);
+        element.click();
     }
 
     /**
@@ -119,12 +126,11 @@ public class HomePage extends BasePage {
      * @param size text S/M/L
      * @return same
      */
-    public HomePage selectSize(String size) {
+    public void selectSize(String size) {
         new Select(sizeSelect).selectByVisibleText(size);
-        return this;
     }
 
-    public HomePage selectColour(String colour) {
+    public void selectColour(String colour) {
         for (WebElement el : colourList) {
             if (el.getAttribute("name").toLowerCase().contains(colour.toLowerCase())) {
                     if (!el.isSelected()) {
@@ -132,7 +138,6 @@ public class HomePage extends BasePage {
                     }
             }
         }
-        return this;
     }
 
     /**
